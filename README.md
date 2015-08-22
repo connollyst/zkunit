@@ -29,7 +29,7 @@ Mocked out with no functionality implemented. Use Mockito to inject your `@Wire`
 Mocked out with no functionality implemented. Very useful for verifying ZK interaction with the client.
 
 Consider the following toy example:
-````
+````java
     @Test
     public void shouldVeryClientsAlert() {
         // Given
@@ -63,7 +63,7 @@ Other `Clients` functions that are useful to verify include `Clients.showBusy`, 
 Mocked out with no functionality implemented. Very useful for verifying ZK execution behavior.
 
 Consider another toy example with the same structure as the previous:
-````
+````java
     @Test
     public void shouldVeryExecutionsSendRedirect() {
         // Given
@@ -91,7 +91,7 @@ Here, we are verifying that the user is redirected when they click the `LogoutBu
 
 Another common use of the `Executions` static in ZK is `Executions.getCurrent()`. The uses of this are so varied,
 however, we didn't provide any default mock behavior. Instead, it's best you provide your own if needed, e.g.:
-````
+````java
     @Test
     public void shouldReturnProvidedMockExecution() {
         // Given
@@ -135,7 +135,7 @@ This can be a real lifesaver as you saw in the `ZKTest` examples above. Long sto
 on Components, simulating user interactions of server side events.
 
 Here's a simple example where we simulate the user clicking a button and verify the button's behavior:
-````
+````java
     @Test
     public void shouldDisableButtonOnClick() {
         // Given
@@ -179,7 +179,7 @@ you can assert.
 
 Here's an example where, similar to the examples above, we simulate the user clicking a button, but we then use
 `ZKAssert` to verify the changes the button made to the user interface:
-````
+````java
     @Test
     public void shouldClearMessagesWhenClearButtonClicked() {
         // Given
