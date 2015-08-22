@@ -1,5 +1,8 @@
 package org.zkoss.zkunit;
 
+import org.zkoss.zk.ui.Component;
+import org.zkoss.zk.ui.event.Event;
+import org.zkoss.zk.ui.event.EventListener;
 import org.zkoss.zul.Column;
 import org.zkoss.zul.Columns;
 import org.zkoss.zul.Grid;
@@ -43,6 +46,28 @@ public class ZKUtils {
         grid.appendChild(rows);
         grid.appendChild(cols);
         return grid;
+    }
+
+    /**
+     * Simulate a ZK event.<br/>
+     * Normally this is handled by ZK but in tests we don't have an active ZK environment.
+     *
+     * @param eventName the name of the event, an event listener must be registered for this event
+     * @param target    the target of the event
+     * @param data      the data to send with the event
+     */
+    public static void simulateEvent(String eventName, Component target, Object data) {
+        simulateEvent(new Event(eventName, target, data));
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void simulateEvent(Event event) {
+        EventListener listener = ZKAssert.assertHasEventListener(event.getTarget(), event.getName());
+        try {
+            listener.onEvent(event);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

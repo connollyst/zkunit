@@ -39,8 +39,8 @@ public class ZKAssert {
      * @param expectedStyle the expected style
      */
     public static void assertStyle(HtmlBasedComponent component, String expectedStyle) {
-        String style = expectedStyle == null ? null : expectedStyle;
-        assertEquals(style, component.getStyle());
+        // TODO don't assert equality, but check if the expected style is _one_ of the styles
+        assertEquals(expectedStyle, component.getStyle());
     }
 
     /**
@@ -50,8 +50,8 @@ public class ZKAssert {
      * @param expectedClass the expected style class
      */
     public static void assertStyleClass(HtmlBasedComponent component, String expectedClass) {
-        String style = expectedClass == null ? null : expectedClass;
-        assertEquals(style, component.getSclass());
+        // TODO don't assert equality, but check if the expected style class is _one_ of the style classes
+        assertEquals(expectedClass, component.getSclass());
     }
 
     /**
@@ -230,28 +230,6 @@ public class ZKAssert {
     public static void assertHasNoEventListeners(Component component, String eventName) {
         Iterator<EventListener<?>> listeners = component.getEventListeners(eventName).iterator();
         assertFalse("expected no '" + eventName + "' event registered on " + component, listeners.hasNext());
-    }
-
-    /**
-     * Simulate a ZK event.<br/>
-     * Normally this is handled by ZK but in tests we don't have an active ZK environment.
-     *
-     * @param eventName the name of the event, an event listener must be registered for this event
-     * @param target    the target of the event
-     * @param data      the data to send with the event
-     */
-    public static void simulateEvent(String eventName, Component target, Object data) {
-        simulateEvent(new Event(eventName, target, data));
-    }
-
-    @SuppressWarnings("unchecked")
-    public static void simulateEvent(Event event) {
-        EventListener listener = assertHasEventListener(event.getTarget(), event.getName());
-        try {
-            listener.onEvent(event);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
     }
 
 }
