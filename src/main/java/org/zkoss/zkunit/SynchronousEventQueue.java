@@ -10,7 +10,7 @@ import java.util.Map;
 /**
  * A synchronous {@link org.zkoss.zk.ui.event.EventQueue} for testing purposes.<br/>
  * Listeners and callbacks are executed immediately and synchronously when an {@link org.zkoss.zk.ui.event.Event} is
- * published ({@link #publish(T event)}).
+ * published.
  *
  * @author Sean Connolly
  */
