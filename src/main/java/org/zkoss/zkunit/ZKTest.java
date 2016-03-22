@@ -14,6 +14,7 @@ import org.zkoss.zk.ui.event.EventQueues;
 import org.zkoss.zk.ui.event.Events;
 import org.zkoss.zk.ui.select.Selectors;
 import org.zkoss.zk.ui.util.Clients;
+import org.zkoss.zul.Filedownload;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -35,7 +36,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
  * @author Sean Connolly
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Selectors.class, Clients.class, Events.class, EventQueues.class, Executions.class})
+@PrepareForTest({Selectors.class, Clients.class, Events.class, EventQueues.class, Executions.class, Filedownload.class})
 public abstract class ZKTest {
 
     private final EventQueueExistsAnswer existsAnswer = new EventQueueExistsAnswer();
@@ -52,6 +53,7 @@ public abstract class ZKTest {
         mockStatic(Events.class);
         mockStatic(EventQueues.class);
         mockStatic(Executions.class);
+        mockStatic(Filedownload.class);
         when(Events.isValid(anyString())).thenReturn(true);
         when(EventQueues.exists(anyString())).thenAnswer(existsAnswer);
         when(EventQueues.lookup(anyString())).thenAnswer(lookupAnswer);
