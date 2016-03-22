@@ -3,7 +3,7 @@
 
     <groupId>org.zkoss</groupId>
     <artifactId>zkunit</artifactId>
-    <version>1.4</version>
+    <version>1.5-SNAPSHOT</version>
 
     <name>zkunit</name>
     <description>Unit test tools for ZK.</description>
@@ -17,7 +17,7 @@
         <developerConnection>
             scm:git:git@github.com:connollyst/zkunit.git
         </developerConnection>
-        <tag>zkunit-1.4</tag>
+        <tag>HEAD</tag>
     </scm>
 
     <developers>
