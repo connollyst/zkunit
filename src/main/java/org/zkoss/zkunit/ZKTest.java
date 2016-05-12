@@ -8,6 +8,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.zkoss.zk.ui.Executions;
 import org.zkoss.zk.ui.Session;
+import org.zkoss.zk.ui.Sessions;
 import org.zkoss.zk.ui.WebApp;
 import org.zkoss.zk.ui.event.EventQueue;
 import org.zkoss.zk.ui.event.EventQueues;
@@ -36,7 +37,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
  * @author Sean Connolly
  */
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Selectors.class, Clients.class, Events.class, EventQueues.class, Executions.class, Filedownload.class})
+@PrepareForTest({Selectors.class, Sessions.class, Clients.class, Events.class, EventQueues.class, Executions.class, Filedownload.class})
 public abstract class ZKTest {
 
     private final EventQueueExistsAnswer existsAnswer = new EventQueueExistsAnswer();
@@ -49,6 +50,7 @@ public abstract class ZKTest {
     public void mockZKEnvironment() {
         queues.clear();
         mockStatic(Selectors.class);
+        mockStatic(Sessions.class);
         mockStatic(Clients.class);
         mockStatic(Events.class);
         mockStatic(EventQueues.class);
