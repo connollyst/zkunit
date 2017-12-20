@@ -1,18 +1,23 @@
 package org.zkoss.zkunit;
 
+import org.mockito.ArgumentCaptor;
 import org.zkoss.zk.ui.Component;
 import org.zkoss.zk.ui.HtmlBasedComponent;
 import org.zkoss.zk.ui.HtmlNativeComponent;
 import org.zkoss.zk.ui.event.Event;
 import org.zkoss.zk.ui.event.EventListener;
+import org.zkoss.zk.ui.event.Events;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.atLeastOnce;
+import static org.powermock.api.mockito.PowerMockito.verifyStatic;
 
 /**
  * A set of utilities for asserting the state of ZK user interfaces.<br/>
@@ -230,6 +235,62 @@ public class ZKAssert {
     public static void assertHasNoEventListeners(Component component, String eventName) {
         Iterator<EventListener<?>> listeners = component.getEventListeners(eventName).iterator();
         assertFalse("expected no '" + eventName + "' event registered on " + component, listeners.hasNext());
+    }
+
+    /**
+     * Assert that at least on event with the given {@code name} is <em>sent</em> with the given {@code target}.<br>
+     * Requires PowerMock has mocked out the {@link Events} singleton. This is easiest done by extending {@link ZKTest}.
+     *
+     * @param name   the name of the event expected
+     * @param target the target component of the expected event
+     * @return the list of all matching events, the test fails if none are fired
+     * @see Events#sendEvent(Event)
+     */
+    public static List<Event> assertEventSent(String name, Component target) {
+        verifyStatic(Events.class, atLeastOnce());
+        ArgumentCaptor<Event> captor = ArgumentCaptor.forClass(Event.class);
+        Events.sendEvent(captor.capture());
+        return assertEvent(name, target, captor);
+    }
+
+    /**
+     * Assert that at least on event with the given {@code name} is <em>sent</em> with the given {@code target}.<br>
+     * Requires PowerMock has mocked out the {@link Events} singleton. This is easiest done by extending {@link ZKTest}.
+     *
+     * @param name   the name of the event expected
+     * @param target the target component of the expected event
+     * @return the list of all matching events, the test fails if none are fired
+     * @see Events#postEvent(Event)
+     */
+    public static List<Event> assertEventPosted(String name, Component target) {
+        verifyStatic(Events.class, atLeastOnce());
+        ArgumentCaptor<Event> captor = ArgumentCaptor.forClass(Event.class);
+        Events.postEvent(captor.capture());
+        return assertEvent(name, target, captor);
+    }
+
+    /**
+     * Assert that at least on event with the given {@code name} is <em>sent</em> with the given {@code target}.<br>
+     * Requires PowerMock has mocked out the {@link Events} singleton. This is easiest done by extending {@link ZKTest}.
+     *
+     * @param name   the name of the event expected
+     * @param target the target component of the expected event
+     * @return the list of all matching events, the test fails if none are fired
+     * @see Events#echoEvent(Event)
+     */
+    public static List<Event> assertEventEchoed(String name, Component target) {
+        verifyStatic(Events.class, atLeastOnce());
+        ArgumentCaptor<Event> captor = ArgumentCaptor.forClass(Event.class);
+        Events.echoEvent(captor.capture());
+        return assertEvent(name, target, captor);
+    }
+
+    private static List<Event> assertEvent(String name, Component target, ArgumentCaptor<Event> captor) {
+        List<Event> events = captor.getAllValues().stream().filter(e -> e.getName().equals(name)).collect(toList());
+        if (events.isEmpty()) {
+            fail("Expected " + name + " fired by " + target);
+        }
+        return events;
     }
 
 }
