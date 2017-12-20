@@ -132,19 +132,28 @@ public abstract class ZKTest {
         @Override
         @SuppressWarnings("unchecked")
         public Void answer(InvocationOnMock invocation) {
-            Component eventTarget = getEventTarget(invocation.getArguments());
-            String eventName = getEventName(invocation.getArguments());
-            Object eventData = getEventData(invocation.getArguments());
-            if (eventTarget != null && eventTarget.getEventListeners(eventName) != null) {
-                for (EventListener listener : eventTarget.getEventListeners(eventName)) {
+            Event event = getEvent(invocation.getArguments());
+            if (event.getTarget() != null && event.getTarget().getEventListeners(event.getName()) != null) {
+                for (EventListener listener : event.getTarget().getEventListeners(event.getName())) {
                     try {
-                        listener.onEvent(new Event(eventName, eventTarget, eventData));
+                        listener.onEvent(event);
                     } catch (Exception e) {
                         fail(e.getMessage());
                     }
                 }
             }
             return null;
+        }
+
+        private Event getEvent(Object... arguments) {
+            if (arguments.length == 1 && arguments[0] instanceof Event) {
+                return (Event) arguments[0];
+            } else {
+                Component eventTarget = getEventTarget(arguments);
+                String eventName = getEventName(arguments);
+                Object eventData = getEventData(arguments);
+                return new Event(eventName, eventTarget, eventData);
+            }
         }
 
         private Component getEventTarget(Object... arguments) {
