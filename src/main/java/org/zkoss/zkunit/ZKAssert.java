@@ -12,7 +12,6 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static java.util.stream.Collectors.toList;
 import static org.hamcrest.Matchers.greaterThan;
 import static org.hamcrest.core.IsInstanceOf.instanceOf;
 import static org.junit.Assert.*;
@@ -286,7 +285,12 @@ public class ZKAssert {
     }
 
     private static List<Event> assertEvent(String name, Component target, ArgumentCaptor<Event> captor) {
-        List<Event> events = captor.getAllValues().stream().filter(e -> e.getName().equals(name)).collect(toList());
+        List<Event> events = new ArrayList<>();
+        for (Event event : captor.getAllValues()) {
+            if (event.getName().equals(name)) {
+                events.add(event);
+            }
+        }
         if (events.isEmpty()) {
             fail("Expected " + name + " fired by " + target);
         }
